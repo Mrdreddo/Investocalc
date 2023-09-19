@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvestoCalc - SIP Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: linear-gradient(to right, #ffcc80, #ff9933); /* Light orange gradient */
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            background-color: #fff;
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            text-align: left;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="number"] {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background: linear-gradient(to right, #ffcc80, #ff9933); /* Light orange gradient */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: linear-gradient(to right, #ff9933, #ffcc80); /* Light orange gradient on hover */
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+        footer {
+            background: linear-gradient(to right, #ffcc80, #ff9933); /* Light orange gradient for footer */
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            width: 100%;
+        }
+        .attribution {
+            font-size: 12px;
+            color: #888;
+            margin-top: 20px;
+        }
+
+        /* Responsive footer adjustments */
+        @media screen and (max-width: 480px) {
+            footer {
+                padding: 10px 0;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <h1>InvestoCalc</h1>
+            <p>-</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <h1>SIP Calculator</h1>
+        <form id="calculator-form">
+            <label for="initial-investment">Initial Investment (₹):</label>
+            <input type="number" id="initial-investment" required><br>
+
+            <label for="monthly-investment">Monthly Investment (P) (₹):</label>
+            <input type="number" id="monthly-investment" required><br>
+
+            <label for="periodic-interest-rate">Interest Rate (i) (%):</label>
+            <input type="number" id="periodic-interest-rate" required><br>
+
+            <label for="number-of-payments">Years:</label>
+            <input type="number" id="number-of-payments" required><br>
+
+            <button type="button" onclick="calculateMaturityAmount()">Calculate</button>
+        </form>
+
+        <div id="result"></div>
+    </div>
+
+    <footer>
+        <div class="attribution">
+            This website is made by MR DREDDO
+        </div>
+    </footer>
+    
+    <script>
+        function calculateMaturityAmount() {
+            const initialInvestment = parseFloat(document.getElementById('initial-investment').value);
+            const monthlyInvestment = parseFloat(document.getElementById('monthly-investment').value);
+            const periodicInterestRate = parseFloat(document.getElementById('periodic-interest-rate').value) / 100;
+            const numberOfPayments = parseInt(document.getElementById('number-of-payments').value)*12;
+
+            const monthlyRate = periodicInterestRate / 12;
+
+            let totalInvestment = initialInvestment + (monthlyInvestment * numberOfPayments);
+
+            let returnOnInitialInvestment = initialInvestment * Math.pow(1 + monthlyRate, numberOfPayments);
+
+            const maturityAmount = returnOnInitialInvestment + (monthlyInvestment * ((Math.pow(1 + monthlyRate, numberOfPayments) - 1) / monthlyRate) * (1 + monthlyRate));
+
+            const totalReturn = maturityAmount - totalInvestment;
+
+            const resultElement = document.getElementById('result');
+            resultElement.innerHTML = `
+                <p>After ${numberOfPayments/12} Years:</p>
+                <p>Final Amount: ₹${maturityAmount.toLocaleString('en-IN')}</p>
+                <p>Total Investment: ₹${totalInvestment.toLocaleString('en-IN')}</p>
+                <p>Total Return: ₹${totalReturn.toLocaleString('en-IN')}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
